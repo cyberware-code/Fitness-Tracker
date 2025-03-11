@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Logged Sessions</title>
+</head>
+<body>
+    <h1>Logged Training Sessions</h1>
+    <div id="training-data"></div>
+
+    <script>
+        // Replace with your Sheet ID and API key
+        const SHEET_ID = '1XQuyQz5uyKAQbtWuOEFcRL0N9BsyPwf4lVJQlrDFJcw';
+        const API_KEY = 'AIzaSyBm8quffA_U1BTUnbBxXeLKuHYyEzLFX7E';
+        const RANGE = 'Sheet1!A:F';
+
+        async function loadSheetData() {
+            const url = `https://sheets.googleapis.com/v4/spreadsheets/1XQuyQz5uyKAQbtWuOEFcRL0N9BsyPwf4lVJQlrDFJcw/values/${RANGE}?key=${API_KEY}`;
+
+            try {
+                const response = await fetch(url);
+                const data = await response.json();
+                displayData(data.values);
+            } catch (error) {
+                console.error('Error:', error);
+            }
+        }
+
+        function displayData(rows) {
+            const container = document.getElementById('training-data');
+            let html = '<table>';
+
+            rows.forEach((row, index) => {
+                // Add Header
+                if (index == 0) {
+                    html += '<thead><tr>';
+                    for (const key of row) {
+                        html += `<th>${key}</th>`
+                    }
+                    html += '</tr></thead>'
+                }
+                else {
+                    html += '<tr>';
+                    for (const key of row) {
+                        html += `<td>${key}</td>`
+                    }
+                    html += '</tr>';
+                }
+
+            });
+
+            html += '</table>';
+            container.innerHTML = html;
+        }
+
+        // Load data on page load
+        window.addEventListener('load', loadSheetData);
+    </script>
+</body>
+</html>
