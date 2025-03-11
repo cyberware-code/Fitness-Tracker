@@ -1,0 +1,34 @@
+<div id="training-data"></div>
+
+<script>
+// Replace with your Sheet ID and API key
+const SHEET_ID = 'your-sheet-id';
+const API_KEY = 'your-api-key';
+const RANGE = 'Sheet1!A:F';
+
+async function loadSheetData() {
+  const url = `https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}/values/${RANGE}?key=${API_KEY}`;
+  
+  try {
+    const response = await fetch(url);
+    const data = await response.json();
+    displayData(data.values);
+  } catch (error) {
+    console.error('Error:', error);
+  }
+}
+
+function displayData(rows) {
+  const container = document.getElementById('training-data');
+  let html = '<table>';
+  
+  rows.forEach((row, index) => {
+    html += `<tr>${row.map(cell => `<td>${cell}</td>`).join('')}</tr>`;
+  });
+  
+  html += '</table>';
+  container.innerHTML = html;
+}
+
+// Load data on page load
+window.addEventListener('load', loadSheetData);
