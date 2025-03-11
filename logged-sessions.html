@@ -19,6 +19,7 @@
             try {
                 const response = await fetch(url);
                 const data = await response.json();
+                console.log('Full API response:',data);
                 displayData(data.values);
             } catch (error) {
                 console.error('Error:', error);
@@ -27,6 +28,11 @@
 
         function displayData(rows) {
             const container = document.getElementById('training-data');
+
+            if(!rows || !rows.length){ container.innerHTML ="<p>No training data found in sheet</p>";
+                return;
+            }
+
             let html = '<table>';
 
             rows.forEach((row, index) => {
